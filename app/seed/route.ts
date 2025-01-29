@@ -104,23 +104,15 @@ async function seedRevenue() {
 export async function GET() {
   try {
     await client.sql`BEGIN`;
-
-
     await seedUsers();
     await seedCustomers();
     await seedInvoices();
     await seedRevenue();
-
     await client.sql`COMMIT`;
 
-    return new Response(JSON.stringify({ message: 'Database seeded successfully' }), {
-      status: 200,
-    });
+    return Response.json({ message: 'Database seeded successfully' });
   } catch (error) {
     await client.sql`ROLLBACK`;
-
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-    });
+    return Response.json({ error }, { status: 500 });
   }
 }
